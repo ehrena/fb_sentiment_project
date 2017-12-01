@@ -1,7 +1,10 @@
 import sqlite3
 import requests
 import json
+import numpy as np
+import datetime
 import re
+import pylab
 from google.cloud import language
 import facebook
 import google.auth
@@ -130,11 +133,28 @@ for post in posts[:500]:
                 print("This is not a valid search term. Please try again.")
 
 #print((sentDict))
-dates = [row[0] for row in cur.execute("SELECT created_time FROM Posts ORDER BY created_time")] #gets all the timestamps from the Posts table
+dates = []
+for row in cur.execute("SELECT created_time FROM Posts ORDER BY created_time"):
+    f = '%Y-%m-%dT%H:%M:%S+0000'
+    ts = row[0]
+    dates.append(datetime.datetime.strptime(ts, f))
+#print(dates)
 sentiments = [row[0] for row in cur.execute("SELECT sentiment_score FROM Posts ORDER BY created_time")] #gets all the sentiments from the Posts table
 magnitudes = [row[0] for row in cur.execute("SELECT magnitude FROM Posts ORDER BY created_time")] #gets all the magnitudes from the Posts table
-#matplotlib.pyplot.plot_date(dates, sentiments)
+#plt.plot(dates, sentiments)
 #plt.show()
+month_dict = {}
+for i in range(1, 13):
+    for row in cur.execute("SELECT * FROM Posts ORDER BY created_time"):
+        if re.match("^[0-9]{4}-[0]+" + str(i) + "-[0-9]{2}.*", row[2]) and i not in month_dict:
+            month_dict[i] = [row[3]]
+        elif re.match("^[0-9]{4}-[0]+" + str(i) + "-[0-9]{2}.*", row[2]) and i in month_dict:
+            month_dict[i].append(row[3])
+        else:
+            pass
+print(month_dict)
+"""for i in range(1, 13):
+    print(sum(month_dict[i]))"""
 
 conn.commit()
 conn.close()
