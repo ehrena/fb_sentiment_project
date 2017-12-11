@@ -3,6 +3,9 @@
 #Day of Week
 
 import sqlite3
+import urllib.request, urllib.parse, urllib.error
+import subprocess
+import warnings
 import requests
 import json
 import numpy as np
@@ -52,6 +55,8 @@ try:
     NLP_CACHE_DICTION = json.loads(cache_contents)
 except:
     NLP_CACHE_DICTION = {}
+
+
 
 """def makeFacebookRequest(baseURL, params = {}):
     global facebook_session
@@ -134,13 +139,17 @@ for post in CACHE_DICTION[user][:500]: #500 posts is close to the max that the l
                 print("This is not a valid search term. Please try again.")
 
 #print((sentDict))
-post_ids = cur.execute("SELECT id FROM Posts")
+"""post_ids = cur.execute("SELECT id FROM Posts")
 post_id_list = []
 for row in post_ids:
     post_id_list.append(row[0])
 post_id_list = post_id_list[:50]
-posts_from_id = graph.get_objects(ids = post_id_list, fields = 'message, place, created_time, likes')
-print(posts_from_id)
+posts_from_id = graph.get_objects(ids = post_id_list, fields = 'message, place, created_time, likes')"""
+
+
+    
+
+#print(posts_from_id)
 
 
 dates = []
